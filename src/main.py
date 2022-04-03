@@ -5,7 +5,6 @@
 Created on Mon Jun 8 15:22:29 2020
 @author: tonifuc3m
 """
-
 import argparse
 import warnings
 
@@ -29,7 +28,7 @@ def parse_arguments():
                         default = '../valid-codes.tsv',
                         dest = "codes_path", help = "path to valid codes TSV")
     parser.add_argument('-s', '--subtask', required = True, dest = 'subtask',
-                        choices=['entities', 'linking'],
+                        choices=['ner', 'norm', 'app'],
                         help = 'Subtask name')
     
     args = parser.parse_args()
@@ -44,8 +43,10 @@ def parse_arguments():
 if __name__ == '__main__':
     
     gs_path, pred_path, codes_path, subtask = parse_arguments()
-    print("llega")
-    if subtask == 'entities':
-        distemist_entities_linking.main(gs_path, pred_path, subtask='entities')
     
+    if  subtask == 'ner':
+        distemist_entities_linking.main(gs_path, pred_path, subtask='ner')
+    elif subtask == 'norm':
+        distemist_entities_linking.main(gs_path, pred_path, subtask='norm')
+        
         
