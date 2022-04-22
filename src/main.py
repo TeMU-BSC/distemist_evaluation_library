@@ -25,7 +25,7 @@ def parse_arguments():
     parser.add_argument("-p", "--pred_path", required = True, dest = "pred_path", 
                         help = "path to predictions file")
     parser.add_argument("-c", "--valid_codes_path", required = False, 
-                        default = '../valid-codes.tsv',
+                        default = '../dictionary_distemist.tsv',
                         dest = "codes_path", help = "path to valid codes TSV")
     parser.add_argument('-s', '--subtask', required = True, dest = 'subtask',
                         choices=['ner', 'norm', 'app'],
@@ -44,9 +44,5 @@ if __name__ == '__main__':
     
     gs_path, pred_path, codes_path, subtask = parse_arguments()
     
-    if  subtask == 'ner':
-        distemist_entities_linking.main(gs_path, pred_path, subtask='ner')
-    elif subtask == 'norm':
-        distemist_entities_linking.main(gs_path, pred_path, subtask='norm')
-        
+    distemist_entities_linking.main(gs_path, pred_path, codes_path, subtask=subtask)
         

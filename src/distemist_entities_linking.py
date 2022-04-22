@@ -16,7 +16,7 @@ def warning_on_one_line(message, category, filename, lineno, file=None, line=Non
 warnings.formatwarning = warning_on_one_line
 
 
-def main(gs_path, pred_path, subtask=['ner','norm']):
+def main(gs_path, pred_path, codes_path, subtask=['ner','norm']):
     '''
     Load GS and Predictions; format them; compute precision, recall and 
     F1-score and show them.
@@ -37,8 +37,8 @@ def main(gs_path, pred_path, subtask=['ner','norm']):
     '''
     
     if subtask=='norm':
-        gs = ann_parsing.main(gs_path, ['ENFERMEDAD'])
-        pred = ann_parsing.main(pred_path, ['ENFERMEDAD'])
+        gs = ann_parsing.main(gs_path, ['ENFERMEDAD'], codes_path)
+        pred = ann_parsing.main(pred_path, ['ENFERMEDAD'], codes_path)
         
         if pred.shape[0] == 0:
             raise Exception('There are not parsed predicted annotations')
@@ -167,7 +167,7 @@ def calculate_metrics(gs, pred, subtask=['ner','norm']):
     if subtask=='norm':
         # Check if codes are equal
         df_sel["is_valid"] = \
-            df_sel.apply(lambda x: (x["NCBITax_x"] == x["NCBITax_y"]), axis=1)
+            df_sel.apply(lambda x: (x["code_x"] == x["code_y"]), axis=1)
     elif subtask=='ner':
         is_valid = df_sel.apply(lambda x: x.isnull().any()==False, axis=1)
         df_sel = df_sel.assign(is_valid=is_valid.values)
