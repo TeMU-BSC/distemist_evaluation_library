@@ -1,0 +1,14 @@
+distemist_subtrack1_linking_tests.tsv
+line 2: change span
+line 3: change off1
+line 13: change label
+add line 14: copy of line 13
+add line 15: prediction for a file not in GS
+
+
+distemist_subtrack2_linking_tests.tsv
+line 5: off1, 770 -> 771
+line 10: code, 417163006 -> 417163006+400138001
+line 11: code, 417163006 -> 417163006+417163006
+add line 12: copy of line 11
+add line 13: wrong prediction
