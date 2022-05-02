@@ -45,24 +45,91 @@ def main(datapath, relevant_labels, codes_path):
         warnings.warn(f"There are duplicated entries in {datapath}. Keeping just the first one...")
         df_ok = df_ok.drop_duplicates(subset=['filename', 'label', 'offset']).copy()
         
-    # Check codes are correct
-    if "code" in df_ok.columns:
-        # Remove "|" at the beginning and end of code column, in case they exist
-        df_ok.loc[:,"code"] = df_ok["code"].apply(lambda k: k.strip("|").strip("+"))
-        
-        # Check all codes are valid, return lines with unvalid codes
-        unvalid_lines = check_valid_codes_in_column(df_ok, "code", valid_codes)
-        if len(unvalid_lines)>0:
-            unvalid_lines_str = list(map(lambda k: str(k), unvalid_lines))
-            warnings.warn(f"Lines {','.join(unvalid_lines_str)} in {datapath} contain unvalid codes. " +
-                          f"Valid codes are those that appear in {codes_path}. Ignoring lines with valid codes...")
-            df_ok = df_ok.drop(unvalid_lines).copy()
+    if "code" not in df_ok.columns:
+        return df_ok
+    
+    # Format codes
+    df_ok.loc[:,"code"] = df_ok["code"].apply(lambda k: format_codes(k)) 
+    
+    # Check all codes are valid, return lines with unvalid codes
+    unvalid_lines = check_valid_codes_in_column(df_ok, "code", valid_codes)
+    if len(unvalid_lines)>0:
+        unvalid_lines_str = list(map(lambda k: str(k), unvalid_lines))
+        warnings.warn(f"Lines {','.join(unvalid_lines_str)} in {datapath} contain unvalid codes. " +
+                  f"Valid codes are those that appear in {codes_path}. " + 
+                  "Ignoring ALL PREDICTIONS in lines with unvalid codes...")
+        df_ok = df_ok.drop(unvalid_lines).copy()
 
     return df_ok
 
-def split_codes(k):
+def format_codes(codes, good_separator='|', bad_separator='+'):
+    '''
+    Format codes
+    1. Force that code separator is correct
+    2. In case the code is multiple, sort them and remove duplicated
+    3. Remove code separators at the beginning and end of code string
+    
+    Parameters
+    ----------
+    codes : string
+        Input code string.
+
+    Returns
+    -------
+    codes_final : string
+        Output (formatted) code string.
+
+    '''
+    # Make sure separator is "|"
+    codes_good_separator = codes.replace(bad_separator, good_separator)
+    
+    # In case the code is multiple, sort them and remove duplicated
+    # E.g. if "9913|9913|3847" was predicted, set it to 3847|9913
+    codes_sorted = good_separator.join(sorted(set(codes_good_separator.split(good_separator))))
+    
+    # Remove separator at the beginning and end of code, in case they exist
+    codes_final = codes_sorted.strip(good_separator)
+    
+    return codes_final
+
+
+
+def split_all_codes(k):
+    '''
+    Split code list using any of the valid separators (+ and |)
+
+    Parameters
+    ----------
+    k : string
+        Codes.
+
+    Returns
+    -------
+    codes : list
+        Codes splitted without |H.
+
+    '''
     codes = k.replace('+', '|').replace('|H','').split('|')
     return codes
 
 def check_valid_codes_in_column(df, colname, valid_codes):
-    return df.loc[df[colname].apply(lambda k: any([code not in valid_codes for code in split_codes(k)])),:].index
+    '''
+    Return index with rows that have at least one code not valid
+
+    Parameters
+    ----------
+    df : pandas DataFrame
+        DESCRIPTION.
+    colname : string
+        DESCRIPTION.
+    valid_codes : set
+        set of valid codes.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    '''
+    return df.loc[df[colname].apply(lambda k: any([code not in valid_codes for code in split_all_codes(k)])),:].index
+    
