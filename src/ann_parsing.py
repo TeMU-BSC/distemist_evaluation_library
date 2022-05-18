@@ -21,8 +21,13 @@ def main(datapath, relevant_labels, codes_path):
 
     # Check column names are correct
     if ','.join(df.columns) == ','.join(['filename','mark','label','off0','off1','span']):
-        print("\nAccording to file headers, you are on subtask ner")
+        print("\nAccording to file headers, you are on subtask ner, GS file")
+    elif ','.join(df.columns) == ','.join(['filename','label','off0','off1','span']):
+        print("\nAccording to file headers, you are on subtask ner, predictions file")
     elif ','.join(df.columns) == ','.join(['filename','mark','label','off0','off1',
+                                           'span', 'code']):
+        print("\nAccording to file headers, you are on subtask norm, predictions file")
+    elif ','.join(df.columns) == ','.join(['filename','label','off0','off1',
                                            'span', 'code']):
         print("\nAccording to file headers, you are on subtask norm, predictions file")
     elif ','.join(df.columns) == ','.join(['filename','mark','label','off0','off1',
