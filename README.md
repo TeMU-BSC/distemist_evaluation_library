@@ -154,3 +154,17 @@ Micro-average F-score = 0.7368
 
 ../toy-data/subtask-linking/distemist_subtrack2_linking_tests.tsv|0.7|0.7778|0.7368
 ```
+
+
+Please, cite us: 
+Miranda-Escalada, A., Gascó, L., Lima-López, S., Farré-Maduell, E., Estrada, D., Nentidis, A., Krithara, A., Katsimpras, G., Paliouras, G., & Krallinger, M. (2022). Overview of DisTEMIST at BioASQ: Automatic detection and normalization of diseases from clinical texts: results, methods, evaluation and multilingual resources. Working Notes of Conference and Labs of the Evaluation (CLEF) Forum. CEUR Workshop Proceedings
+
+@article{miranda2022overview,
+title={Overview of DisTEMIST at BioASQ: Automatic detection and normalization of diseases from clinical texts: results, methods, evaluation and multilingual resources},
+author={Miranda-Escalada, Antonio and Gascó, Luis and Lima-López, Salvador and 
+Farré-Maduell, Eulàlia and Estrada, Darryl and Nentidis, Anastasios and Krithara, Anastasia and 
+Katsimpras, Georgios and Paliouras, Georgios and Krallinger, Martin},
+booktitle={Working Notes of Conference and Labs of the Evaluation (CLEF) Forum. CEUR Workshop Proceedings},
+year={2022}
+}
+
